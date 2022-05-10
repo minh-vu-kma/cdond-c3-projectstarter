@@ -43,12 +43,11 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            # Your code here
-            exit 1
+            npm i
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-
+      - run: npm run lint
   build-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -67,11 +66,13 @@ jobs:
 
   test-frontend:
     docker:
-      # Docker image here
+      - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run: npm i
+      - run: npm run test
                 
   test-backend:
     docker:
@@ -83,7 +84,7 @@ jobs:
             
   scan-frontend:
     docker:
-      # Docker image here
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
       # Restore from cache

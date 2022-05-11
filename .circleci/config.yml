@@ -107,6 +107,8 @@ jobs:
     steps:
       - restore_cache:
           keys: [frontend-build]
+      - attach_workspace:
+          at: .
       - run:
           name: Scan frontend dependencies
           working_directory: ./frontend
@@ -122,7 +124,7 @@ jobs:
       - run:
           name: Scan backend dependencies
           command: |
-            npm audit --audit-level=critical || true
+            npm audit --audit-level=critical
 #   deploy-infrastructure:
 #     docker:
 #       - image: amazon/aws-cli

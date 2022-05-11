@@ -112,8 +112,7 @@ jobs:
           name: Scan frontend dependencies
           command: |
             cd frontend
-            npm install
-            npm audit fix --audit-level=critical --force
+            npm install --package-lock-only
             npm audit --audit-level=critical 
 
   scan-backend:
@@ -127,7 +126,7 @@ jobs:
           name: Scan backend dependencies
           command: |
             cd backend
-            npm install
+            npm install 
             npm audit --audit-level=critical || true
 #   deploy-infrastructure:
 #     docker:

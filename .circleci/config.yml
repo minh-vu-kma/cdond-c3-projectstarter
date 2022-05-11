@@ -112,7 +112,6 @@ jobs:
           name: Scan frontend dependencies
           command: |
             cd frontend
-            cat package.json
             npm install 
             npm audit --audit-level=critical 
 
@@ -127,9 +126,8 @@ jobs:
           name: Scan backend dependencies
           command: |
             cd backend
-            cat package.json
             npm install 
-            npm audit --audit-level=critical || true
+            npm audit --audit-level=critical 
 #   deploy-infrastructure:
 #     docker:
 #       - image: amazon/aws-cli

@@ -106,26 +106,42 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [frontend-build]
+      - attach_workspace:
+          at: .
       - run:
-          name: Scan frontend dependencies
-          command: |
-            cd frontend
-            npm install
-            npm audit --audit-level=critical
+          name: Check Frontend against security vulnerabilities
+          working_directory: ./frontend
+          command: npm audit --audit-level=critical
+    # steps:
+    #   - checkout
+    #   - restore_cache:
+    #       keys: [frontend-build]
+    #   - run:
+    #       name: Scan frontend dependencies
+    #       command: |
+    #         cd frontend
+    #         npm install
+    #         npm audit --audit-level=critical
 
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - restore_cache:
-          keys: [backtend-build]
+      - attach_workspace:
+          at: .
       - run:
-          name: Scan backend dependencies
-          command: |
-            npm audit --audit-level=critical
+          name: Check Backend against security vulnerabilities
+          working_directory: ./backend
+          command: npm audit --audit-level=critical
+    # steps:
+    #   - checkout
+    #   - restore_cache:
+    #       keys: [backtend-build]
+    #   - run:
+    #       name: Scan backend dependencies
+    #       command: |
+    #         npm audit --audit-level=critical
 #   deploy-infrastructure:
 #     docker:
 #       - image: amazon/aws-cli

@@ -114,8 +114,10 @@ jobs:
           name: Scan frontend dependencies
           working_directory: ./frontend
           command: |
+            cd frontend
+            npm install
             npm audit --audit-level=critical
-
+            
   scan-backend:
     docker:
       - image: circleci/node:13.8.0

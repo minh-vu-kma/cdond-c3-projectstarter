@@ -1,43 +1,44 @@
 version: 2.1
 
-# commands:
-#   destroy-environment:
-#     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-#     parameters:
-#       workflow_id:
-#         type: string
-#       event:
-#         type: string 
-#     steps:
-#       - run:
-#           name: Destroy environments
-#           command: |
-#             echo "Destroying environment: << parameters.workflow_id >>"
-#             aws s3 rm s3://udapeople-<< parameters.workflow_id >> --recursive
-#             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_id >>
-#             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_id >>
-#           when: << parameters.event >>
-#   revert-migrations:
-#     description: Revert the last migration if successfully run in the current workflow.
-#     parameters:
-#       when:
-#         type: string
-#       id:
-#         type: string     
-#     steps:
-#       - run:
-#           name: Revert migrations
-#           working_directory: ./backend
-#           command: |
-#             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-#             SUCCESS = 1
-#             if(( $SUCCESS==1 )); 
-#             then
-#             #  cd ~/project/backend
-#             #  npm install
-#             #  Add revert code here. You can find this in the Getting Started section.
-#               exit 1
-#             fi
+commands:
+  # destroy-environment:
+  #   description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+  #   parameters:
+  #     workflow_id:
+  #       type: string
+  #     event:
+  #       type: string 
+  #   steps:
+  #     - run:
+  #         name: Destroy environments
+  #         command: |
+  #           echo "Destroying environment: << parameters.workflow_id >>"
+  #           aws s3 rm s3://udapeople-<< parameters.workflow_id >> --recursive
+  #           aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_id >>
+  #           aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_id >>
+  #         when: << parameters.when >>
+  # revert_migrations:
+  #   description: Revert the last migration if successfully run in the current workflow.
+  #   parameters:
+  #     when:
+  #       type: string
+  #     id:
+  #       type: string
+  #   steps:
+  #     - run:
+  #         name: Revert migrations
+  #         working_directory: ./backend
+  #         command: |
+  #           SUCCESS=$(curl -H "token: 2a9e15d6-b9fa-4b1f-a5dc-e3b9643a9b63" --request GET https://api.memstash.io/values/DB_MIGRATION_<< parameters.workflow_id >>)
+  #           echo $SUCCESS
+  #           if [[ "$SUCCESS" == "success" ]]
+  #           then
+  #             pwd
+  #             ls -la
+  #             npm run migrations:revert
+  #           fi
+  #         when: << parameters.when >>
+
             
 jobs:
   build-frontend:
@@ -157,10 +158,10 @@ jobs:
               --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKLOW_ID:0:7}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output test >> .circleci/ansible/inventory.txt
-      # - persist_to_workspace:
-      #     root: ~/
-      #     paths:
-      #       - project/.circleci/ansible/inventory.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
       # - destroy-enviroment:
       #     workflow_id: "${CIRCLE_WORKLOW_ID:0:7}" 
       #     event: on_fail  

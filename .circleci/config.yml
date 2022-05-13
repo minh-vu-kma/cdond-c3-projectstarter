@@ -175,7 +175,7 @@ jobs:
     steps:
       - checkout 
       - add_ssh_keys:
-          fingerprints: [0d:0a:27:cc:e1:d4:45:67:ae:76:41:2a:6a:70:20:55]
+          fingerprints: [6b:0a:56:c0:24:ae:54:5d:b5:80:68:23:25:78:02:10]
       - attach_workspace:
           at: .
       - run:
@@ -191,7 +191,6 @@ jobs:
             pwd &&
             ls -la
             cat inventory.txt
-            ansible -m ping all
             ansible-playbook -i inventory.txt configure-server.yml
 #       # Here's where you will add some code to rollback on failure      
 

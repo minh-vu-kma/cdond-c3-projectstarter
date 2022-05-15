@@ -151,7 +151,6 @@ jobs:
                --query 'Reservations[*].Instances[*].PublicIpAddress' \
                --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
                --output text >> inventory.txt
-            echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
       - run: yum install -y tar gzip
       - persist_to_workspace:
@@ -230,7 +229,7 @@ jobs:
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
             export API_URL="http://${BACKEND_IP}:3030"
-            echo "API_URL = ${API_URL}"
+
             echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
       - run:
@@ -263,7 +262,6 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            # your code here
             cd backend
             npm i
             npm run build

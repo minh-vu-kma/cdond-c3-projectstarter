@@ -1,2 +1,2 @@
 URL01: https://github.com/hoabattu1991/cdond-c3-projectstarter
-URL02: https://s3.console.aws.amazon.com/s3/buckets/udapeople-7f7f93d?region=us-east-1
+URL02: https://udapeople-7f7f93d.s3.amazonaws.com/index.html#/employees

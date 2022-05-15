@@ -71,10 +71,8 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      # Restore from cache
       - restore_cache:
           keys: [frontend-build]
-      # Your job code here
       - run:
           name: Run frontend tests
           command: |
@@ -86,12 +84,9 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
       - checkout
-      # Restore from cache
       - restore_cache:
           keys: [backend-build]
-      # Your job code here
       - run:
           name: Run backend tests
           command: |
@@ -102,12 +97,9 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
       - checkout
-      # Restore from cache
       - restore_cache:
           keys: [frontend-build]
-      # Your job code here
       - run:
           name: Scan frontend dependencies
           command: |
@@ -119,23 +111,20 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
       - checkout
-      # Restore from cache
       - restore_cache:
           keys: [backend-build]
-      # Your job code here
       - run:
           name: Scan backend dependencies
           command: |
               cd backend
               npm install
               npm audit fix --audit-level=critical --force
+
   deploy-infrastructure:
     docker:
       - image: amazon/aws-cli
     steps:
-      # Checkout code from git
       - checkout
       - run:
           name: Ensure back-end infrastructure exists
@@ -169,11 +158,10 @@ jobs:
           root: .
           paths:
             - ./.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure
+      - destroy-environment
 
   configure-infrastructure:
     docker:
-      # Docker image here that supports Ansible
       - image: python:3.7-alpine3.11
     steps:
       - checkout
@@ -190,13 +178,12 @@ jobs:
           command: |
             cat .circleci/ansible/inventory.txt
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
-      # Here's where you will add some code to rollback on failure
+      - destroy-environment
 
   run-migrations:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
       - checkout
       - restore_cache:
           keys: [backend-build]
@@ -405,9 +392,9 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          # filters:
-          #   branches:
-          #     only: [test-feature-branch]
+          filters:
+            branches:
+              only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:

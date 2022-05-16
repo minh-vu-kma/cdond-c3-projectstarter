@@ -154,9 +154,9 @@ jobs:
             cat inventory.txt
       - run: yum install -y tar gzip
       - persist_to_workspace:
-          root: .
+          root: .circleci/ansible/
           paths:
-            - ./.circleci/ansible/inventory.txt
+            - inventory.txt
       - destroy-environment
 
   configure-infrastructure:
@@ -165,7 +165,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: .
+          at: .circleci/ansible/
       - add_ssh_keys:
           fingerprints: ["a7:8a:c8:06:90:2a:6d:c4:46:b9:b3:ea:3a:0e:f5:cd"]
       - run:
@@ -252,7 +252,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["a7:8a:c8:06:90:2a:6d:c4:46:b9:b3:ea:3a:0e:f5:cd"]
       - attach_workspace:
-          at: .
+          at: .circleci/ansible/
       - run:
           name: Install dependencies
           command: |

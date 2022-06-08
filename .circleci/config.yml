@@ -164,8 +164,9 @@ jobs:
           root: .
           paths:
             - .circleci/ansible/inventory.txt
-      - destroy-enviroment:
-          workflow_id: "${CIRCLE_WORKLOW_ID:0:7}"   
+      - destroy-environment:
+          workflow_id: "${CIRCLE_WORKLOW_ID:0:7}" 
+          when: on-fail  
 
   configure-infrastructure:
     docker:

@@ -9,13 +9,14 @@ commands:
     steps:
       - run:
           name: Destroy environments
+          when: on_fail
           command: |
             echo "Destroying environment: << parameters.workflow_id >>"
             aws s3 rm s3://udapeople-<< parameters.workflow_id >> --recursive
             aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflow_id >>
             aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflow_id >>
-            when: << parameters.when >>
-revert_migrations:
+    
+revert-migrations:
   description: Revert the last migration if successfully run in the current workflow.
   parameters:
     workflow_id:
@@ -25,6 +26,7 @@ revert_migrations:
   steps:
     - run:
         name: Revert migrations
+        when: on_fail
         command: |
             SUCCESS=$(curl --insecure  https://kvdb.io/<< parameters.id >>/migration_<< parameters.workflow_id >>)
             if (( $SUCCESS == 1 ));
@@ -33,7 +35,7 @@ revert_migrations:
                 npm install
                 npm run migration:revert
             fi
-        when: << parameters.when >>
+        #when: << parameters.when >>
             
 jobs:
   build-frontend:
@@ -166,7 +168,7 @@ jobs:
             - .circleci/ansible/inventory.txt
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on-fail
+         # when: on-fail
 
   configure-infrastructure:
     docker:
@@ -190,7 +192,7 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail      
+          #when: on_fail      
 
   run-migrations:
     docker:
@@ -258,12 +260,11 @@ jobs:
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}          
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
           id: 9Sog5ABxYkH9cdP9nQXNM4
-          when: on_fail      
+                
                     
   deploy-backend:
     docker:

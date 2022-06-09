@@ -261,11 +261,9 @@ jobs:
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}          
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-          id: 9Sog5ABxYkH9cdP9nQXNM4
-                
-                    
+    #  - revert-migrations:
+    #      workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+   #       id: 9Sog5ABxYkH9cdP9nQXNM4                            
   deploy-backend:
     docker:
       - image: python:3.7-alpine3.11
@@ -290,11 +288,9 @@ jobs:
             ansible-playbook -i inventory deploy-backend.yml 
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-          id: 9Sog5ABxYkH9cdP9nQXNM4
-          when: on_fail 
+  #    - revert-migrations:
+  #        workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+  #        id: 9Sog5ABxYkH9cdP9nQXNM4
 
   smoke-test:
     docker:
@@ -359,11 +355,9 @@ jobs:
             echo CIRCLE_WORKFLOW_ID "${CIRCLE_WORKFLOW_ID:0:7}"  
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-          when: on_fail
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-          id: 9Sog5ABxYkH9cdP9nQXNM4
-          when: on_fail
+     # - revert-migrations:
+      #    workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      #    id: 9Sog5ABxYkH9cdP9nQXNM4
       - persist_to_workspace:
           root: ~/
           paths:

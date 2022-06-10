@@ -188,9 +188,9 @@ jobs:
             ansible --version
       - run:
           name: Configure server
-          working_directory: ./.circleci/ansible
+          working_directory: .circleci/ansible
           command: |
-            pwd
+            pwd && ls
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:

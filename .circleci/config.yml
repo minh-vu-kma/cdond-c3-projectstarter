@@ -146,7 +146,7 @@ jobs:
  
       - run:
           name: Ensure front-end infrastructure exist
-          working_directory: .circleci/files
+          working_directory: .circleci/ansible
           command: |
             aws cloudformation deploy \
               --template-file frontend.yml \
@@ -275,7 +275,7 @@ jobs:
       - add_ssh_keys:
           fingerprints: [6b:0a:56:c0:24:ae:54:5d:b5:80:68:23:25:78:02:10]
       - attach_workspace:
-          at: ~/
+          at: . 
       - run:
           name: Install dependencies
 
@@ -286,7 +286,7 @@ jobs:
             aws --version
       - run:
           name: Deploy backend
-          working_directory: ./.circleci/ansible
+          working_directory: .circleci/ansible
           command: |
             ansible-playbook -i inventory deploy-backend.yml 
       - destroy-environment:

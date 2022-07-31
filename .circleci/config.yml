@@ -177,7 +177,7 @@ jobs:
     steps:
       - checkout 
       - add_ssh_keys:
-          fingerprints: [6b:0a:56:c0:24:ae:54:5d:b5:80:68:23:25:78:02:10]
+          fingerprints: [1e:c7:01:d2:32:17:a3:51:cf:91:19:77:68:8a:8e:0f]
       - attach_workspace:
           at: .
       - run:

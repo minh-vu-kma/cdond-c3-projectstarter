@@ -1,32 +1,30 @@
 ---
-- name: Copy zipped artifact to server
-  copy:
-    src: artifact.tar.gz
-    dest: /tmp/artifact.tar.gz
-    owner: ubuntu
-    group: ubuntu
-    mode: 0755
-
-- name: Create directory for extraction
+- name: "Creates backend app directory"
   file:
-    path: /home/ubuntu/backend
-    owner: ubuntu
-    group: ubuntu
-    mode: 0755
+    path: ~/backend-app
     state: directory
 
-- name: Extract zipped artifact for backend
+- name: "Unarchive backend files"
   unarchive:
-    src: /tmp/artifact.tar.gz
-    dest: /home/ubuntu/backend
-    remote_src: yes
+    src: artifact.tar.gz
+    dest: ~/backend-app
 
-- name: Install dependencies
-  npm:
-    path: /home/ubuntu/backend
-
-- name: Startup server
+- name: "Installing Node Dependencies"
   shell: |
-    cd /home/ubuntu/backend
+    cd ~/backend-app
+    npm i
+- name: "Executing Node app with PM2"
+  shell: |
+    cd ~/backend-app/dist
     pm2 stop default
-    pm2 start npm -- start
+    pm2 start main.js
+  register: execute_node
+
+- name: print message
+  debug:
+    msg: "{{ execute_node.stdout_lines }}"
+
+- name: "Configure pm2 to start as service"
+  become: true
+  shell: |
+    env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu

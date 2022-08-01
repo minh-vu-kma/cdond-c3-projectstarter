@@ -208,7 +208,7 @@ jobs:
             cd backend
             pwd && ls
             npm install
-            npm run migrations > migration_status.txt
+            npm run migrations > migrations_status.txt
       - run:
           name: Send migration results to memstash
           command: |

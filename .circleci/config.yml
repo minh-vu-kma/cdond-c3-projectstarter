@@ -18,8 +18,7 @@ revert-migrations:
   parameters:
     workflow_id:
       type: string
-    id:
-      type: string
+      default: ${CIRCLE_WORKFLOW_ID:0:7}
   steps:
     - run:
         name: Revert migrations

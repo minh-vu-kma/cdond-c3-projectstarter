@@ -164,9 +164,9 @@ jobs:
             cat inventory.txt
             pwd
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .circleci/ansible/inventory.txt
+            - project/.circleci/ansible/inventory.txt
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
          # when: on-fail
@@ -179,10 +179,9 @@ jobs:
       - add_ssh_keys:
           fingerprints: [1e:c7:01:d2:32:17:a3:51:cf:91:19:77:68:8a:8e:0f]
       - attach_workspace:
-          at: .
+          at: ~/
       - run:
           name: Install dependencies
-          working_directory: .circleci/ansible
           command: |
             apk add --update ansible
             ansible --version
@@ -190,6 +189,7 @@ jobs:
           name: Configure server
           working_directory: .circleci/ansible
           command: |
+            cd .circleci/ansible
             pwd && ls
             cat inventory.txt
             ansible-playbook -i inventory.txt configure-server.yml

@@ -291,7 +291,6 @@ jobs:
             apk add --update nodejs npm
       - run:
           name: Deploy backend
-          working_directory: .circleci/ansible
           command: |
             cd backend
             npm i

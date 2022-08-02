@@ -19,18 +19,18 @@ commands:
       workflow_id:
         type: string
         default: ${CIRCLE_WORKFLOW_ID:0:7}
-  steps:
-    - run:
-        name: Revert migrations
-        when: on_fail
-        command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/9FrLc8sTaXuXxfCmTxqNZp/migration_${CIRCLE_WORKFLOW_ID:0:7})
-            if (( $SUCCESS == 1 ));
-            then
-                cd ~/project/backend
-                npm install
-                npm run migration:revert
-            fi
+    steps:
+      - run:
+          name: Revert migrations
+          when: on_fail
+          command: |
+              SUCCESS=$(curl --insecure  https://kvdb.io/9FrLc8sTaXuXxfCmTxqNZp/migration_${CIRCLE_WORKFLOW_ID:0:7})
+              if (( $SUCCESS == 1 ));
+              then
+                  cd ~/project/backend
+                  npm install
+                  npm run migration:revert
+              fi
             
 jobs:
   build-frontend:

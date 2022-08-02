@@ -24,7 +24,7 @@ revert-migrations:
         name: Revert migrations
         when: on_fail
         command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/<< parameters.id >>/migration_<< parameters.workflow_id >>)
+            SUCCESS=$(curl --insecure  https://kvdb.io/9FrLc8sTaXuXxfCmTxqNZp/migration_${CIRCLE_WORKFLOW_ID:0:7})
             if (( $SUCCESS == 1 ));
             then
                 cd ~/project/backend
@@ -207,7 +207,7 @@ jobs:
               curl https://kvdb.io/9FrLc8sTaXuXxfCmTxqNZp/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi      
       - destroy-environment
-      #- revert-migrations
+      - revert-migrations
       
   deploy-frontend:
     docker:

@@ -279,14 +279,11 @@ jobs:
             cd backend
             npm i
             npm run build
-            cd ..
-            # Zip the directory
+            cd .. 
             tar -C backend -czvf artifact.tar.gz .
             mkdir -p .circleci/ansible/roles/deploy/files/
             cp artifact.tar.gz .circleci/ansible/roles/deploy/files/
             cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml 
       - destroy-environment
       - revert-migrations

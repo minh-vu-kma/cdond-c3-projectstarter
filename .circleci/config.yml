@@ -327,6 +327,8 @@ jobs:
             else
               return 1
             fi
+      - destroy-environment
+      - revert-migrations
 
   cloudfront-update:
     docker:
@@ -378,9 +380,12 @@ jobs:
               echo CurrentCircleWorkflowID: "${CIRCLE_WORKFLOW_ID:0:7}"
               if [[ "${OldWorkflowID}" != "" && "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
               then
+                echo "<-------------------DELETE----------------------->"
                 aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
                 aws cloudformation delete-stack --stack-name "udapeople-backend-${OldWorkflowID}"
                 aws cloudformation delete-stack --stack-name "udapeople-frontend-${OldWorkflowID}"
+              else
+                echo "<-------------------CANNOT CLEANUP----------------------->"
               fi
             
 

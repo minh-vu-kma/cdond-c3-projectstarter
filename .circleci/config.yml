@@ -197,7 +197,7 @@ jobs:
       - restore_cache:
           keys: [backend-build]
       - run:
-          name: Install PIP
+          name: Install pip
           command: sudo apt-get install python-pip python-dev
       - run:
           name: Install awscli
@@ -207,8 +207,8 @@ jobs:
           command: |
             cd backend
             npm install
-            # Run and save the migration output
             npm run migrations > migrations_dump.txt
+            cat migrations_dump.txt
       - run:
           name: Send migration results to kvdb.io
           command: |
